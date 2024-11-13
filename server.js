@@ -73,7 +73,13 @@ const audioUpload = multer({
 app.post('/api/openai/chat', rateLimiterMiddleware, async (req, res) => {
   try {
     console.log('Received chat request');
-    const response = await axios.post('https://api.uniapi.me/v1/chat/completions', req.body, {
+    const requestBody = {
+      model: 'gpt-4o-mini',
+      messages: req.body.messages,
+      max_tokens: req.body.max_tokens || 500
+    };
+
+    const response = await axios.post('https://api.uniapi.me/v1/chat/completions', requestBody, {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
